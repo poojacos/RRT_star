@@ -8,7 +8,6 @@ Created on Wed Apr  1 18:36:22 2020
 import math
 
 def line_line_collision(x1, y1, x2, y2, x3, y3, x4, y4):
-    #http://www.jeffreythompson.org/collision-detection/line-line.php
     d1 = ((x4-x3)*(y1-y3) - (y4-y3)*(x1-x3)) / ((y4-y3)*(x2-x1) - (x4-x3)*(y2-y1))
     d2 = ((x2-x1)*(y1-y3) - (y2-y1)*(x1-x3)) / ((y4-y3)*(x2-x1) - (x4-x3)*(y2-y1))
     if d1 >= 0 and d1 <= 1 and d2 >= 0 and d2 <= 1:
@@ -42,10 +41,8 @@ def circle_rect_collision(cx, cy, rect, radius): #bottom left is origin
     elif(cy > ry + rh):
         testy = ry + rh
     
-#    print(testx, testy, obj_radius)    
     dx, dy = cx - testx, cy - testy
     d = math.sqrt(dx**2 + dy**2)
-#    print(dx, dy, d, obj_radius)
     if d <= radius:
         return True
     return False

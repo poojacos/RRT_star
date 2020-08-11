@@ -38,10 +38,6 @@ def center_spines(lc = None, ax=None, centerx=0, centery=0):
     ax.spines['right'].set_position(('data', centerx - 1))
     ax.spines['top'].set_position(('data', centery - 1))
 
-#    # Draw an arrow at the end of the spines
-#    ax.spines['left'].set_path_effects([EndArrow()])
-#    ax.spines['bottom'].set_path_effects([EndArrow()])
-
     # Hide the line (but not ticks) for "extra" spines
     for side in ['right', 'top']:
         ax.spines[side].set_color('none')
@@ -87,7 +83,6 @@ def adjust_spines(ax, spines):
         # no xaxis ticks
         ax.xaxis.set_ticks([])
         
-#http://matplotlib.org/examples/pylab_examples/spine_placement_demo.html
 def plot_cenetered(x, y):
     fig = plt.figure()    
     ax = fig.add_subplot(2, 2, 1)
@@ -95,52 +90,35 @@ def plot_cenetered(x, y):
     adjust_spines(ax, ['left', 'bottom'])
     plt.show()
 
-#https://stackoverflow.com/questions/4694478/center-origin-in-matplotlib
 def treeplot(x, y, edges = None, itr = 0):
-#    https://stackoverflow.com/questions/21352580/matplotlib-plotting-numerous-disconnected-line-segments-with-different-colors
-#    lines = [[(0, 1), (1, 1)], [(2, 3), (3, 3)], [(1, 2), (1, 3)]]
-#    c = np.array([(1, 0, 0, 1), (0, 1, 0, 1), (0, 0, 1, 1)])
-#    lc = mc.LineCollection(lines, colors=c, linewidths=2)
-    
-#    line, = plt.plot(x, y, '.', color = 'green')
     line, = plt.plot(x, y, '.', color = 'green')  #for states
     line2, = plt.plot([8], [8], 'o', color = 'black')
     rect1 = [[4, 4, 5, 5, 4], [-4, 9, 9, -4, -4]]
     rect2 = [[-6, -6, 0, 0, -6], [-5, -4, -4, -5, -5]]
     plt.plot(rect1[0], rect1[1], color = 'magenta')
     plt.plot(rect2[0], rect2[1], color = 'magenta')
-#    plt.savefig('./steps/scatter_%d.png'%(itr))
-#    rect = [[(4, -4), (4, 9)], [(4, 9), (5, 9)], [(5, -4), (5, 9)], [(4, -4), (5, -4)],\
-#               [(-6, -4), (0, -4)], [(0, -4), (0, -5)], [(-6,-5),(0,-5)], [(-6,-4), (-6,-5)]]
-#    lc = mc.LineCollection(rect, colors=np.array([(0, 0, 1, 1)]), linewidths=1)
     lc = mc.LineCollection(edges, colors=np.array([(0, 0, 1, 1)]), linewidths=1)
     center_spines(lc) #for edges
     plt.axis('equal')
     plt.xlim(-15,15)
     plt.ylim(-15,15)
-#    fig1 = plt.gcf()
     plt.savefig('./steps/tree_%d.png'%(itr))
     plt.show()
 
 def treepath(x, y, edges = None, path = None, itr = 0):
-#    line, = plt.plot(x, y, '.', color = 'green')  #for states
     line2, = plt.plot([8], [8], 'o', color = 'black')
     rect1 = [[4, 4, 5, 5, 4], [-4, 9, 9, -4, -4]]
     rect2 = [[-6, -6, 0, 0, -6], [-5, -4, -4, -5, -5]]
     plt.plot(rect1[0], rect1[1], color = 'magenta')
     plt.plot(rect2[0], rect2[1], color = 'magenta')
-#    rect = [[(4, -4), (4, 9)], [(4, 9), (5, 9)], [(5, -4), (5, 9)], [(4, -4), (5, -4)],\
-#               [(-6, -4), (0, -4)], [(0, -4), (0, -5)], [(-6,-5),(0,-5)], [(-6,-4), (-6,-5)]]
     lc = None
     if edges:
         lc = mc.LineCollection(edges, colors=np.array([(0, 0, 1, 1)]), linewidths=0.1)
     plt.plot(path[0], path[1], color = 'red') #for path
-#    lc = mc.LineCollection(edges, colors=c, linewidths=1)
     center_spines(lc) #for edges
     plt.axis('equal')
     plt.xlim(-15,15)
     plt.ylim(-15,15)
-#    fig1 = plt.gcf()
     plt.savefig('./steps/path_%d.png'%(itr))
     plt.show()
     
@@ -154,10 +132,3 @@ def costplot(costs, step):
         plt.savefig('./res/goalcost.jpg')
     except:
         print('Error: Invalid iterations or step size')
-#x = np.random.randint(-10,10,20)
-#x = np.linspace(0, 2*np.pi, 100)
-#y = 2*np.sin(x)
-#treepath(x[:10], x[10:], None, [x[:5], x[10:15]], 4) 
-#lines = [[(0, 1), (1, 1)], [(2, 3), (3, 3)], [(1, 2), (1, 3)]]
-#treeplot(x[:10], x[10:], lines, 0) 
-#treeplot(x,y) 

@@ -43,7 +43,6 @@ def steer_extend(from_node, to_node, epsilon = 1):
         y += space.resolution * math.sin(theta)
         path_x.append(x)
         path_y.append(y)
-#    print('steer cost:', to_node.cost)
     return to_node.cost, [path_x, path_y], Node(-1, x, y, to_node.cost, None, [])
     
     
@@ -61,9 +60,7 @@ def steer(from_node, to_node):
         y += space.resolution * math.sin(theta)
         path_x.append(x)
         path_y.append(y)
-#    print('steer cost:', to_node.cost)
     return to_node.cost, [path_x, path_y], to_node
-#    return to_node.cost, [path_x, path_y], Node(-1, x, y, to_node.cost, None, [])
         
 def is_in_collision(node):
 # returns True if state x of the robot is incollision with any of the
@@ -80,7 +77,6 @@ def nearest(node, num = 1):
     _, nearest_ind = kdtree.query(np.array([node.x, node.y]).reshape(1,-1), k = num)
     if is_in_obstacle(node, space.occ_nodes[nearest_ind[0]]):
         return None
-#    print('nearest ', nearest_ind[0], space.occ_nodes[nearest_ind[0]])
     return space.occ_nodes[nearest_ind[0]]
  
 def get_neighbours(node, gamma = 10, eta = 5):
@@ -91,13 +87,11 @@ def get_neighbours(node, gamma = 10, eta = 5):
     except:
         print('error in boundary radius calc')
     kdtree = KDTree(np.array(space.occ))
-#    print(kdtree.data)
     idx = kdtree.query_ball_point([node.x, node.y], boundary)
     
     for i in idx:
         if not is_in_obstacle(node, space.occ_nodes[i]):
             neigh.append(space.occ_nodes[i])
-#    print('neighbour_nodes number: ',len(neigh))
     return neigh
     
 def is_in_obstacle(from_node, to_node):
@@ -112,14 +106,12 @@ def connect(new_node, nearest_node, cost):
 # cost of state x = cost of the parent + cost of steer(parent, x)
     #find most optimal connection for new_node
     closest_node, min_cost = nearest_node, cost
-#    print('connect: closest node before: ', closest_node)
     for neigh in neighbours:
         cost_to_check = neigh.cost + new_node.dist(neigh) #cost of steer(parent, x) = distance bwn nodes?
         if cost_to_check < min_cost:
             closest_node, min_cost = neigh, cost_to_check
             
     #add new_node, update it's edges, update it's parent's edges
-#    print('connect: closest node after: ', closest_node)    
     new_node.parent = closest_node
     new_node.cost = min_cost
     new_node.edges.append(closest_node)
@@ -148,7 +140,6 @@ def rewire(new_node, neighbours):
             neigh.parent = new_node
         
             #remove the parent, child connection
-#            print('len of neigh node = {}, old parent edges = {}'.format(len(neigh.edges), len(old_parent.edges)))
             for node in neigh.edges:
                 if node.x == old_parent.x and node.y == old_parent.y:
                     neigh.edges.remove(node)
@@ -185,7 +176,6 @@ def get_path():
         return []
     
     path = [[nodes_in_goal[idx].x], [nodes_in_goal[idx].y]]
-#    path = [[], []]
     start_not_reached = True
     nxt = nodes_in_goal[idx]
     sx, sy = space.start.x, space.start.y
@@ -232,16 +222,12 @@ if __name__ == "__main__":
     for i in range(iterations):
         print('--------iteration %d---------'%i)
         rand = sample(xmin, xmax, ymin, ymax) #rand initialized with x, y and cost = None
-#        print('sampled point:', rand)
         nearest_node = nearest(rand)
         if nearest_node == None:
             continue
-#        cost, path, new_node = steer(nearest_node, rand)
         cost, path, new_node = steer_extend(nearest_node, rand)
         if is_in_collision(new_node) or new_node.notinspace(xmin, xmax, ymin, ymax):
             continue
-#        print('sampled point not in collision')
-#        print('new node ', new_node)
         spacex.append(new_node.x)
         spacey.append(new_node.y)
         neighbours = get_neighbours(new_node)  #obstacle free neighbours
@@ -251,13 +237,11 @@ if __name__ == "__main__":
         if collision.point_circle_collision(new_node.x, new_node.y, space.goal.x,\
                                             space.goal.y, space.goal_radius) == True:
             nodes_in_goal.append(new_node)
-#            print('node in goal', new_node.cost)
             
         kdtree = space.kdtree_update()
         mingoal, _ = min_goal_cost(nodes_in_goal)
         min_path_cost.append(mingoal)
         edges = get_edges()
-#        originplot.treeplot(spacex, spacey, edges, i)
         if i%50 == 0 or i == iterations - 1:
 #            originplot.treeplot(spacex, spacey, edges, i)
             path = get_path()
